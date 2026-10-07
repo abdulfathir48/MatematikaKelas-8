@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Pembelajaran Interaktif Teorema Pythagoras - Kelas VIII SMP</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --secondary: #06b6d4;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --bg-main: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --radius: 16px;
+            --shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding-bottom: 40px;
+        }
+
+        /* Header Navigasi */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 15px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .badge-xp {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            backdrop-filter: blur(5px);
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            background-color: #e2e8f0;
+            height: 6px;
+            position: fixed;
+            top: 54px;
+            left: 0;
+            z-index: 99;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--success);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Main Layout */
+        .container {
+            max-width: 900px;
+            margin: 30px auto 0 auto;
+            padding: 0 15px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+            border: 1px solid #edf2f7;
+            display: none;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        .card.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 { font-size: 1.8rem; color: var(--primary); margin-bottom: 10px; }
+        h2 { font-size: 1.4rem; color: var(--primary); margin-bottom: 15px; border-bottom: 2px solid #e2e8f0; padding-bottom: 8px; }
+        h3 { font-size: 1.1rem; color: var(--text-main); margin-bottom: 10px; }
+        p { margin-bottom: 12px; font-size: 1rem; color: #334155; }
+
+        /* Tombol Style */
+        .btn {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            text-decoration: none;
+            margin: 5px 2px;
+        }
+
+        .btn:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
+        .btn:active { transform: translateY(0); }
+        .btn-success { background-color: var(--success); }
+        .btn-success:hover { background-color: #059669; }
+        .btn-warning { background-color: var(--warning); color: #fff; }
+        .btn-secondary { background-color: #64748b; }
+
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* SVG Segitiga & Visualisasi */
+        .svg-container {
+            text-align: center;
+            margin: 20px 0;
+            background-color: #f1f5f9;
+            padding: 15px;
+            border-radius: 12px;
+        }
+
+        svg {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Form Input & Kalkulator */
+        .calc-box {
+            background-color: #f0f9ff;
+            border: 2px dashed var(--secondary);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+        }
+
+        .result-box {
+            margin-top: 15px;
+            padding: 12px;
+            background: #e0e7ff;
+            border-radius: 8px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Pilihan Ganda & Interactive Quiz */
+        .options-list {
+            list-style: none;
+            margin: 15px 0;
+        }
+
+        .option-item {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+        }
+
+        .option-item:hover {
+            border-color: var(--primary);
+            background: #f0fdf4;
+        }
+
+        .option-item.selected {
+            border-color: var(--primary);
+            background: #e0e7ff;
+        }
+
+        .feedback {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+            font-weight: 600;
+        }
+
+        .feedback.correct {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #34d399;
+        }
+
+        .feedback.incorrect {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #f87171;
+        }
+
+        /* Petunjuk & Pembahasan Box */
+        .collapsible-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--secondary);
+            padding: 12px;
+            margin: 10px 0;
+            display: none;
+            border-radius: 0 8px 8px 0;
+        }
+
+        /* Badge Grid */
+        .badge-grid {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        .badge-card {
+            background: #f1f5f9;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            width: 120px;
+            opacity: 0.4;
+            transition: all 0.3s ease;
+        }
+
+        .badge-card.unlocked {
+            opacity: 1;
+            background: #fef3c7;
+            border: 2px solid var(--warning);
+            transform: scale(1.05);
+        }
+
+        .badge-icon {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .badge-title {
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* Responsif untuk Layar Kecil */
+        @media (max-width: 600px) {
+            .container { padding: 0 10px; margin-top: 15px; }
+            .card { padding: 18px; }
+            h1 { font-size: 1.4rem; }
+            h2 { font-size: 1.2rem; }
+            .btn { width: 100%; margin: 4px 0; }
+            .btn-group { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header App -->
+    <header>
+        <div class="logo-title">📐 MathVIII - Pythagoras</div>
+        <div class="badge-xp">⭐ <span id="xp-display">0</span> XP</div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progress-bar"></div>
+    </div>
+
+    <div class="container">
+
+        <!-- 1. HALAMAN BERANDA -->
+        <div class="card active" id="step-0">
+            <div style="text-align: center; padding: 20px 0;">
+                <span style="font-size: 4rem;">📐</span>
+                <h1>MEDIA PEMBELAJARAN INTERAKTIF<br>TEOREMA PYTHAGORAS</h1>
+                <p style="font-size: 1.1rem; color: var(--text-muted);">Matematika Kelas VIII SMP/MTs</p>
+                <br>
+                <button class="btn btn-success" style="font-size: 1.2rem; padding: 15px 30px;" onclick="nextStep(1)">🚀 Mulai Belajar</button>
+                <br><br>
+                <button class="btn btn-secondary" onclick="openGoogleDocs()">📄 Materi Lengkap (Google Docs)</button>
+            </div>
+        </div>
+
+        <!-- 2. TUJUAN PEMBELAJARAN -->
+        <div class="card" id="step-1">
+            <h2>🎯 Tujuan Pembelajaran</h2>
+            <p>Setelah mempelajari media interaktif ini, kamu diharapkan mampu:</p>
+            <ul style="margin-left: 20px; margin-bottom: 20px;">
+                <li>Memahami konsep segitiga siku-siku dan mengidentifikasi sisi miring (hipotenusa).</li>
+                <li>Menjelaskan dan membuktikan rumus Teorema Pythagoras.</li>
+                <li>Menghitung panjang salah satu sisi segitiga siku-siku jika dua sisi lainnya diketahui.</li>
+                <li>Menerapkan Teorema Pythagoras dalam memecahkan masalah kehidupan sehari-hari.</li>
+            </ul>
+            <div class="btn-group">
+                <button class="btn btn-secondary" onclick="nextStep(0)">Kembali</button>
+                <button class="btn" onclick="nextStep(2)">Lanjut: Eksplorasi Konsep ➡️</button>
+            </div>
+        </div>
+
+        <!-- 3. EKSPLORASI KONSEP -->
+        <div class="card" id="step-2">
+            <h2>🔍 Eksplorasi Konsep Segitiga Siku-siku</h2>
+            <p>Teorema Pythagoras **hanya berlaku pada segitiga siku-siku** (segitiga yang salah satu sudutnya bernilai $90^\circ$).</p>
+            
+            <div class="svg-container">
+                <svg width="260" height="200" viewBox="0 0 260 200">
+                    <!-- Segitiga -->
+                    <polygon points="40,160 200,160 40,30" fill="#e0e7ff" stroke="#4f46e5" stroke-width="4"/>
+                    <!-- Simbol Sudut Siku-Siku -->
+                    <rect x="40" y="140" width="20" height="20" fill="none" stroke="#ef4444" stroke-width="2"/>
+                    <!-- Label Sisi -->
+                    <text x="120" y="185" font-weight="bold" fill="#1e293b">a (Sisi Alas)</text>
+                    <text x="10" y="100" font-weight="bold" fill="#1e293b">b (Tegak)</text>
+                    <text x="130" y="85" font-weight="bold" fill="#4f46e5">c (Hipotenusa)</text>
+                </svg>
+            </div>
+
+            <div style="background: #f0fdf4; border-left: 4px solid var(--success); padding: 12px; margin-bottom: 15px;">
+                <strong>📌 Ciri Penting Hipotenusa (c):</strong>
+                <p style="margin:0;">Sisi miring atau <em>hipotenusa</em> adalah sisi terpanjang pada segitiga siku-siku dan posisinya selalu tepat berada di **depan sudut siku-siku**.</p>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-secondary" onclick="nextStep(1)">Kembali</button>
+                <button class="btn" onclick="nextStep(3)">Lanjut: Rumus & Kalkulator ➡️</button>
+            </div>
+        </div>
+
+        <!-- 4. RUMUS & KALKULATOR PYTHAGORAS -->
+        <div class="card" id="step-3">
+            <h2>📐 Rumus & Kalkulator Pythagoras</h2>
+            <p>Kuadrat sisi miring sama dengan jumlah kuadrat sisi tegak dan sisi alasnya:</p>
+            
+            <div style="text-align: center; background: #e0e7ff; padding: 15px; border-radius: 12px; font-size: 1.5rem; font-weight: bold; color: var(--primary); margin-bottom: 15px;">
+                a² + b² = c²
+            </div>
+            
+            <p>Turunan Rumus:</p>
+            <ul style="margin-left: 20px; margin-bottom: 15px;">
+                <li>Mencari Hipotenusa: <strong>c = √(a² + b²)</strong></li>
+                <li>Mencari Sisi Alas: <strong>a = √(c² - b²)</strong></li>
+                <li>Mencari Sisi Tegak: <strong>b = √(c² - a²)</strong></li>
+            </ul>
+
+            <!-- Kalkulator Interaktif -->
+            <div class="calc-box">
+                <h3>🧮 Kalkulator Pythagoras Interaktif</h3>
+                <p style="font-size: 0.85rem;">Pilih nilai yang ingin dicari, lalu masukkan dua nilai lainnya:</p>
+                <div class="form-group">
+                    <label>Pilih Sisi yang Dicari:</label>
+                    <select id="calc-target" class="form-control" onchange="resetCalcInputs()">
+                        <option value="c">Sisi Miring (c)</option>
+                        <option value="a">Sisi Alas (a)</option>
+                        <option value="b">Sisi Tegak (b)</option>
+                    </select>
+                </div>
+                <div class="form-group" id="input-group-1">
+                    <label id="label-val1">Nilai Sisi a:</label>
+                    <input type="number" id="calc-val1" class="form-control" placeholder="Masukkan nilai">
+                </div>
+                <div class="form-group" id="input-group-2">
+                    <label id="label-val2">Nilai Sisi b:</label>
+                    <input type="number" id="calc-val2" class="form-control" placeholder="Masukkan nilai">
+                </div>
+                <button class="btn btn-success" style="width:100%;" onclick="calculatePythagoras()">Hitung Nilai</button>
+                <div class="result-box" id="calc-result" style="display:none;"></div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-secondary" onclick="nextStep(2)">Kembali</button>
+                <button class="btn" onclick="nextStep(4)">Lanjut: Contoh Soal ➡️</button>
+            </div>
+        </div>
+
+        <!-- 5. CONTOH SOAL & PEMBAHASAN -->
+        <div class="card" id="step-4">
+            <h2>💡 Contoh Soal & Pembahasan</h2>
+            
+            <!-- Contoh 1 -->
+            <div style="border:1px solid #cbd5e1; border-radius:10px; padding:15px; margin-bottom:15px;">
+                <strong>Contoh Soal 1:</strong>
+                <p>Diketahui sebuah segitiga siku-siku memiliki panjang alas $a = 6\text{ cm}$ dan tinggi $b = 8\text{ cm}$. Hitunglah panjang sisi miring ($c$)!</p>
+                <button class="btn btn-warning" onclick="toggleBox('hint-1')">💡 Lihat Petunjuk</button>
+                <button class="btn" onclick="toggleBox('solution-1')">📖 Lihat Pembahasan</button>
+                
+                <div class="collapsible-box" id="hint-1">
+                    <strong>Petunjuk:</strong> Gunakan rumus $c = \sqrt{a^2 + b^2}$.
+                </div>
+                <div class="collapsible-box" id="solution-1">
+                    <strong>Pembahasan:</strong><br>
+                    $c = \sqrt{6^2 + 8^2}$<br>
+                    $c = \sqrt{36 + 64}$<br>
+                    $c = \sqrt{100} = 10\text{ cm}$.<br>
+                    Jadi, panjang sisi miringnya adalah <strong>10 cm</strong>.
+                </div>
+            </div>
+
+            <!-- Contoh 2 -->
+            <div style="border:1px solid #cbd5e1; border-radius:10px; padding:15px; margin-bottom:15px;">
+                <strong>Contoh Soal 2:</strong>
+                <p>Panjang sisi miring segitiga siku-siku adalah $13\text{ cm}$ dan panjang salah satu sisi siku-sikunya adalah $12\text{ cm}$. Berapakah panjang sisi siku-siku lainnya?</p>
+                <button class="btn btn-warning" onclick="toggleBox('hint-2')">💡 Lihat Petunjuk</button>
+                <button class="btn" onclick="toggleBox('solution-2')">📖 Lihat Pembahasan</button>
+                
+                <div class="collapsible-box" id="hint-2">
+                    <strong>Petunjuk:</strong> Karena dicari sisi siku-siku, gunakan rumus pengurangan $a = \sqrt{c^2 - b^2}$.
+                </div>
+                <div class="collapsible-box" id="solution-2">
+                    <strong>Pembahasan:</strong><br>
+                    $a = \sqrt{13^2 - 12^2}$<br>
+                    $a = \sqrt{169 - 144}$<br>
+                    $a = \sqrt{25} = 5\text{ cm}$.<br>
+                    Jadi, panjang sisi siku-siku lainnya adalah <strong>5 cm</strong>.
+                </div>
+            </div>
+
+            <!-- Contoh 3 -->
+            <div style="border:1px solid #cbd5e1; border-radius:10px; padding:15px; margin-bottom:15px;">
+                <strong>Contoh Soal 3:</strong>
+                <p>Sebuah tangga sepanjang $5\text{ meter}$ bersandar pada dinding rumah. Jarak kaki tangga ke dinding adalah $3\text{ meter}$. Berapakah tinggi dinding yang dicapai tangga?</p>
+                <button class="btn btn-warning" onclick="toggleBox('hint-3')">💡 Lihat Petunjuk</button>
+                <button class="btn" onclick="toggleBox('solution-3')">📖 Lihat Pembahasan</button>
+                
+                <div class="collapsible-box" id="hint-3">
+                    <strong>Petunjuk:</strong> Tangga sebagai hipotenusa ($c = 5$), jarak kaki sebagai alas ($a = 3$), tinggi dinding ($b$).
+                </div>
+                <div class="collapsible-box" id="solution-3">
+                    <strong>Pembahasan:</strong><br>
+                    $b = \sqrt{5^2 - 3^2} = \sqrt{25 - 9} = \sqrt{16} = 4\text{ meter}$.<br>
+                    Jadi, tinggi dinding yang dicapai tangga adalah <strong>4 meter</strong>.
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-secondary" onclick="nextStep(3)">Kembali</button>
+                <button class="btn" onclick="nextStep(5)">Lanjut: Penerapan ➡️</button>
+            </div>
+        </div>
+
+        <!-- 6. PENERAPAN DALAM KEHIDUPAN -->
+        <div class="card" id="step-5">
+            <h2>🌍 Penerapan Teorema Pythagoras</h2>
+            <p>Teorema Pythagoras digunakan dalam berbagai profesi dan kehidupan sehari-hari:</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin: 15px 0;">
+                <div style="background:#f1f5f9; padding:15px; border-radius:10px;">
+                    🏠 <strong>Bidang Konstruksi</strong><br>
+                    Memastikan sudut bangunan tepat siku-siku ($90^\circ$) menggunakan rasio $3 : 4 : 5$.
+                </div>
+                <div style="background:#f1f5f9; padding:15px; border-radius:10px;">
+                    📺 <strong>Layar Ponsel & TV</strong><br>
+                    Ukuran diagonal layar (misal 55 inci) dihitung menggunakan prinsip Teorema Pythagoras.
+                </div>
+                <div style="background:#f1f5f9; padding:15px; border-radius:10px;">
+                    ⛵ <strong>Navigasi & Penerbangan</strong><br>
+                    Menghitung jarak terpendek (jarak lurus) antara dua titik koordinat tempat.
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <button class="btn btn-secondary" onclick="nextStep(4)">Kembali</button>
+                <button class="btn btn-success" onclick="nextStep(6)">Mulai Latihan Interaktif 📝</button>
+            </div>
+        </div>
+
+        <!-- 7. LATIHAN INTERAKTIF -->
+        <div class="card" id="step-6">
+            <h2>✍️ Latihan Interaktif</h2>
+            <p>Jawablah pertanyaan berikut untuk menguji pemahamanmu. Jawaban yang benar memberikan poin XP!</p>
+            
+            <div id="practice-container">
+                <div style="display:flex; justify-between; align-items:center; margin-bottom:10px;">
+                    <span id="practice-level" style="background:var(--primary); color:white; padding:4px 10px; border-radius:12px; font-size:0.8rem;">Easier</span>
+                    <span id="practice-counter" style="font-weight:bold; color:var(--text-muted);">Soal 1 dari 10</span>
+                </div>
+                <p id="practice-question" style="font-size:1.1rem; font-weight:600;"></p>
+                <ul class="options-list" id="practice-options"></ul>
+                <div class="feedback" id="practice-feedback"></div>
+                <button class="btn btn-success" id="btn-next-practice" style="display:none; width:100%; margin-top:15px;" onclick="nextPracticeQuestion()">Soal Berikutnya ➡️</button>
+            </div>
+
+            <div class="btn-group" id="practice-nav">
+                <button class="btn btn-secondary" onclick="nextStep(5)">Kembali ke Materi</button>
+            </div>
+        </div>
+
+        <!-- 8. KUIS AKHIR - FORM NAMA & KELAS -->
+        <div class="card" id="step-7">
+            <h2>🏆 Kuis Evaluasi Akhir</h2>
+            <p>Sebelum memulai kuis evaluasi akhir, silakan isi identitas diri kamu terlebih dahulu:</p>
+            
+            <form id="student-form" onsubmit="startFinalQuiz(event)">
+                <div class="form-group">
+                    <label for="student-name">Nama Lengkap Siswa:</label>
+                    <input type="text" id="student-name" class="form-control" placeholder="Contoh: Budi Santoso" required>
+                </div>
+                <div class="form-group">
+                    <label for="student-class">Kelas:</label>
+                    <input type="text" id="student-class" class="form-control" placeholder="Contoh: VIII-A" required>
+                </div>
+                <button type="submit" class="btn btn-success" style="width:100%;">🚀 Mulai Kerjakan Kuis</button>
+            </form>
+
+            <div class="btn-group">
+                <button class="btn btn-secondary" onclick="nextStep(6)">Kembali ke Latihan</button>
+            </div>
+        </div>
+
+        <!-- 8. KUIS AKHIR - SOAL -->
+        <div class="card" id="step-8">
+            <div style="display:flex; justify-between; align-items:center; margin-bottom:10px;">
+                <span style="font-weight:bold; color:var(--primary);">Kuis Evaluasi</span>
+                <span id="quiz-counter" style="font-weight:bold; color:var(--text-muted);">Soal 1 dari 10</span>
+            </div>
+            <p id="quiz-question" style="font-size:1.1rem; font-weight:600; margin-bottom:15px;"></p>
+            <ul class="options-list" id="quiz-options"></ul>
+            
+            <button class="btn btn-success" id="btn-quiz-next" style="width:100%; margin-top:15px;" onclick="submitQuizAnswer()">Lanjut ➡️</button>
+        </div>
+
+        <!-- 9. KUIS AKHIR - HASIL EVALUASI -->
+        <div class="card" id="step-9">
+            <div style="text-align: center;">
+                <h2>🎉 Hasil Evaluasi Kuis</h2>
+                <p>Selamat telah menyelesaikan Kuis Evaluasi Teorema Pythagoras!</p>
+                
+                <div style="background:#f1f5f9; padding:20px; border-radius:12px; margin:20px 0;">
+                    <h3 id="res-student-name" style="color:var(--primary);">Nama Siswa</h3>
+                    <p id="res-student-class" style="color:var(--text-muted); margin-bottom:15px;">Kelas</p>
+                    
+                    <div style="font-size: 3rem; font-weight: bold; color: var(--primary);" id="res-score">0</div>
+                    <p style="font-weight: bold;" id="res-category">Kategori: -</p>
+                    <hr style="margin:15px 0;">
+                    <p>Jumlah Benar: <strong id="res-correct" style="color:var(--success);">0</strong> | Jumlah Salah: <strong id="res-wrong" style="color:var(--danger);">0</strong></p>
+                    <p>Persentase Kelulusan: <strong id="res-percentage">0%</strong></p>
+                </div>
+
+                <!-- Lencana Pencapaian Gamifikasi -->
+                <h3>🎖️ Lencana Pencapaian Kamu</h3>
+                <div class="badge-grid">
+                    <div class="badge-card" id="badge-1">
+                        <div class="badge-icon">🥉</div>
+                        <div class="badge-title">Pencari Jejak</div>
+                    </div>
+                    <div class="badge-card" id="badge-2">
+                        <div class="badge-icon">🥈</div>
+                        <div class="badge-title">Pakar Pythagoras</div>
+                    </div>
+                    <div class="badge-card" id="badge-3">
+                        <div class="badge-icon">🥇</div>
+                        <div class="badge-title">Master Geometri</div>
+                    </div>
+                </div>
+
+                <div id="sheets-status" style="margin: 15px 0; font-size:0.9rem; color:var(--text-muted);">
+                    Mengirim hasil ke Google Sheets...
+                </div>
+
+                <button class="btn" onclick="restartApp()">🔄 Ulangi Pembelajaran</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /* ==========================================================================
+           KONFIGURASI GURU (SILAKAN EDIT DI SINI)
+           ========================================================================== */
+        const GOOGLE_SCRIPT_URL = "TEMPEL_URL_GOOGLE_APPS_SCRIPT_DI_SINI";
+        const GOOGLE_DOCS_URL = "TEMPEL_LINK_GOOGLE_DOCS_DI_SINI";
+
+        /* State Global Aplikasi */
+        let currentStep = 0;
+        let totalSteps = 10;
+        let userXP = 0;
+        let studentData = { name: "", class: "" };
+
+        // Data Soal Latihan Interaktif (10 Soal)
+        const practiceData = [
+            { level: "Easier", q: "Manakah di bawah ini yang merupakan rumus Teorema Pythagoras untuk segitiga siku-siku dengan hipotenusa c?", options: ["a² + b² = c²", "a² - b² = c²", "c² + a² = b²", "a + b = c"], ans: 0, explanation: "Rumus baku Teorema Pythagoras adalah kuadrat sisi miring sama dengan jumlah kuadrat dua sisi lainnya (a² + b² = c²)." },
+            { level: "Easier", q: "Pada segitiga siku-siku, sisi miring (hipotenusa) selalu berada di...", options: ["Samping sudut siku-siku", "Depan sudut siku-siku", "Bawah sudut siku-siku", "Atas sudut siku-siku"], ans: 1, explanation: "Hipotenusa adalah sisi miring yang posisinya selalu tepat di depan sudut siku-siku." },
+            { level: "Medium", q: "Jika panjang sisi alas a = 3 cm dan sisi tegak b = 4 cm, berapakah panjang sisi miring c?", options: ["5 cm", "6 cm", "7 cm", "8 cm"], ans: 0, explanation: "c = √(3² + 4²) = √(9 + 16) = √25 = 5 cm." },
+            { level: "Medium", q: "Diketahui c = 10 cm dan a = 6 cm. Berapakah panjang sisi b?", options: ["7 cm", "8 cm", "9 cm", "10 cm"], ans: 1, explanation: "b = √(10² - 6²) = √(100 - 36) = √64 = 8 cm." },
+            { level: "Medium", q: "Manakah kelompok angka berikut yang membentuk Triple Pythagoras?", options: ["3, 4, 6", "5, 12, 13", "6, 8, 11", "7, 10, 12"], ans: 1, explanation: "5² + 12² = 25 + 144 = 169 = 13² (Sesuai Pythagoras)." },
+            { level: "Medium", q: "Sebuah segitiga memiliki panjang sisi 9 cm, 12 cm, dan 15 cm. Apakah segitiga tersebut tergolong segitiga siku-siku?", options: ["Ya, karena 9² + 12² = 15²", "Bukan, karena 9 + 12 ≠ 15", "Ragu-ragu", "Hanya segitiga sama kaki"], ans: 0, explanation: "81 + 144 = 225 = 15². Maka segitiga tersebut adalah segitiga siku-siku." },
+            { level: "Challenging", q: "Sebuah kapal berlayar ke timur sejauh 12 km, kemudian berbelok ke utara sejauh 9 km. Berapakah jarak terpendek kapal dari titik awal?", options: ["15 km", "21 km", "108 km", "225 km"], ans: 0, explanation: "Jarak terpendek = √(12² + 9²) = √(144 + 81) = √225 = 15 km." },
+            { level: "Challenging", q: "Panjang diagonal sebuah persegi panjang yang memiliki ukuran 16 cm x 12 cm adalah...", options: ["20 cm", "28 cm", "14 cm", "25 cm"], ans: 0, explanation: "Diagonal = √(16² + 12²) = √(256 + 144) = √400 = 20 cm." },
+            { level: "Challenging", q: "Sebuah tangga sepanjang 10 meter bersandar pada tembok. Jika jarak dasar tangga ke tembok 6 meter, tinggi tembok adalah...", options: ["8 meter", "4 meter", "16 meter", "64 meter"], ans: 0, explanation: "Tinggi = √(10² - 6²) = √(100 - 36) = √64 = 8 meter." },
+            { level: "Challenging", q: "Suatu segitiga siku-siku memiliki panjang hipotenusa 25 cm dan salah satu sisinya 7 cm. Panjang sisi tegak lainnya adalah...", options: ["24 cm", "20 cm", "18 cm", "12 cm"], ans: 0, explanation: "Sisi = √(25² - 7²) = √(625 - 49) = √576 = 24 cm." }
+        ];
+
+        let currentPracticeIdx = 0;
+
+        // Data Soal Kuis Akhir (10 Soal)
+        const quizData = [
+            { q: "Rumus untuk mencari panjang sisi miring (c) pada segitiga siku-siku adalah...", options: ["c = √(a² + b²)", "c = √(a² - b²)", "c = a² + b²", "c = √(a + b)"], ans: 0 },
+            { q: "Jika a = 5 cm dan b = 12 cm, maka panjang c adalah...", options: ["13 cm", "17 cm", "15 cm", "14 cm"], ans: 0 },
+            { q: "Jika c = 20 cm dan b = 16 cm, berapakah panjang a?", options: ["12 cm", "10 cm", "8 cm", "14 cm"], ans: 0 },
+            { q: "Manakah di antara kelompok tiga bilangan berikut yang TIDAK termasuk Triple Pythagoras?", options: ["3, 4, 5", "5, 12, 13", "7, 24, 25", "4, 5, 6"], ans: 3 },
+            { q: "Sebuah tiang bendera setinggi 12 meter diikat dengan tali kawat ke tanah. Jarak patok tanah ke dasar tiang 5 meter. Panjang kawat minimal adalah...", options: ["13 meter", "17 meter", "14 meter", "15 meter"], ans: 0 },
+            { q: "Panjang diagonal layar laptop yang berukuran panjang 12 inci dan lebar 9 inci adalah...", options: ["15 inci", "21 inci", "18 inci", "20 inci"], ans: 0 },
+            { q: "Persegi ABCD memiliki panjang sisi 8 cm. Panjang diagonal AC adalah...", options: ["√128 cm", "16 cm", "64 cm", "12 cm"], ans: 0 },
+            { q: "Seorang anak menerbangkan layang-layang dengan panjang benang 150 m. Jarak anak secara horizontal di tanah ke titik bawah layang-layang 90 m. Tinggi layang-layang adalah...", options: ["120 m", "100 m", "80 m", "60 m"], ans: 0 },
+            { q: "Taman berbentuk segitiga siku-siku dengan sisi siku-siku 18 m dan 24 m. Panjang sisi miring taman tersebut adalah...", options: ["30 m", "42 m", "36 m", "28 m"], ans: 0 },
+            { q: "Suatu segitiga siku-siku isosceles (sama kaki) memiliki panjang hipotenusa 10 cm. Maka panjang kuadrat dari masing-masing sisi tegaknya adalah...", options: ["50", "25", "100", "75"], ans: 0 }
+        ];
+
+        let currentQuizIdx = 0;
+        let quizAnswers = [];
+
+        /* Navigasi Halaman / Step */
+        function nextStep(stepIndex) {
+            document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
+            document.getElementById(`step-${stepIndex}`).classList.add('active');
+            currentStep = stepIndex;
+            
+            // Update Progress Bar
+            let progressPct = (currentStep / 9) * 100;
+            document.getElementById('progress-bar').style.width = `${progressPct}%`;
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            if (stepIndex === 6) renderPracticeQuestion();
+        }
+
+        function toggleBox(id) {
+            const box = document.getElementById(id);
+            box.style.display = (box.style.display === 'block') ? 'none' : 'block';
+        }
+
+        /* Kalkulator Pythagoras */
+        function resetCalcInputs() {
+            const target = document.getElementById('calc-target').value;
+            const l1 = document.getElementById('label-val1');
+            const l2 = document.getElementById('label-val2');
+            
+            if (target === 'c') {
+                l1.innerText = "Nilai Sisi a:";
+                l2.innerText = "Nilai Sisi b:";
+            } else if (target === 'a') {
+                l1.innerText = "Nilai Sisi Miring (c):";
+                l2.innerText = "Nilai Sisi Tegak (b):";
+            } else {
+                l1.innerText = "Nilai Sisi Miring (c):";
+                l2.innerText = "Nilai Sisi Alas (a):";
+            }
+            document.getElementById('calc-result').style.display = 'none';
+        }
+
+        function calculatePythagoras() {
+            const target = document.getElementById('calc-target').value;
+            const v1 = parseFloat(document.getElementById('calc-val1').value);
+            const v2 = parseFloat(document.getElementById('calc-val2').value);
+            const resBox = document.getElementById('calc-result');
+
+            if (isNaN(v1) || isNaN(v2) || v1 <= 0 || v2 <= 0) {
+                resBox.style.display = 'block';
+                resBox.style.color = 'var(--danger)';
+                resBox.innerText = "⚠️ Harap masukkan nilai angka yang valid dan lebih besar dari 0!";
+                return;
+            }
+
+            let result = 0;
+            if (target === 'c') {
+                result = Math.sqrt(v1 * v1 + v2 * v2);
+                resBox.innerText = `Hasil Hipotenusa (c) = √(${v1}² + ${v2}²) = ${result.toFixed(2)}`;
+            } else {
+                if (v1 <= v2) {
+                    resBox.style.display = 'block';
+                    resBox.style.color = 'var(--danger)';
+                    resBox.innerText = "⚠️ Sisi miring (c) harus lebih panjang daripada sisi siku-sikunya!";
+                    return;
+                }
+                result = Math.sqrt(v1 * v1 - v2 * v2);
+                resBox.innerText = `Hasil Sisi ${target.toUpperCase()} = √(${v1}² - ${v2}²) = ${result.toFixed(2)}`;
+            }
+            resBox.style.color = 'var(--primary)';
+            resBox.style.display = 'block';
+        }
+
+        /* Latihan Interaktif Mechanics */
+        function renderPracticeQuestion() {
+            const qData = practiceData[currentPracticeIdx];
+            document.getElementById('practice-level').innerText = qData.level;
+            document.getElementById('practice-counter').innerText = `Soal ${currentPracticeIdx + 1} dari ${practiceData.length}`;
+            document.getElementById('practice-question').innerText = qData.q;
+            
+            const optionsEl = document.getElementById('practice-options');
+            optionsEl.innerHTML = "";
+            document.getElementById('practice-feedback').style.display = "none";
+            document.getElementById('btn-next-practice').style.display = "none";
+
+            qData.options.forEach((opt, idx) => {
+                const li = document.createElement('li');
+                li.className = 'option-item';
+                li.innerText = opt;Berikut adalah rancangan lengkap media pembelajaran interaktif berbasis web untuk materi Teorema Pythagoras kelas 8 SMP.
+
+---
+
+### Rancangan Media Pembelajaran
+Media dirancang berbasis **Single File Web Application** (semua HTML, CSS, dan JS dalam satu file `index.html`) agar ringan, fleksibel, dan responsif di smartphone maupun laptop. Media ini tidak memerlukan framework berat dan tetap berfungsi secara offline untuk eksplorasi materi serta kuis (koneksi internet hanya dibutuhkan saat pengiriman data nilai ke Google Sheets).
+
+---
+
+### Struktur Fitur dan Navigasi
